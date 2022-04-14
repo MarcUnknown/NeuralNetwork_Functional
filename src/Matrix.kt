@@ -19,7 +19,7 @@ class Matrix(rows: Int, columns: Int) {
     }
 
     fun getColumns() : Int{
-        return columns
+        return elements[0].size
     }
 
     fun getRows() : Int{
@@ -28,5 +28,9 @@ class Matrix(rows: Int, columns: Int) {
 
     override fun toString(): String {
         return elements.joinToString(separator = "\n") { elementsInRow -> elementsInRow.joinToString(separator = "\t") }
+    }
+
+    fun of(elements : MutableList<MutableList<Double>>) : Matrix {
+        return Matrix(elements)
     }
 }

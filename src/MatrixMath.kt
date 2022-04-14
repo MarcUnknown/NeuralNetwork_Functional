@@ -13,69 +13,59 @@ class MatrixMath {
         return result
     }
 
-    fun hadamard_dot(matrix_1: Matrix, matrix_2: Matrix): Matrix {
-        require(!(matrix_1.getRows() != matrix_2.getRows() || matrix_1.getColumns() !== matrix_2.getColumns())) { "Matrices must have same dimensions!" }
-        val result = Matrix(matrix_1.getRows(), matrix_1.getColumns())
-        for (i in 0 until matrix_1.getRows()) {
-            for (j in 0 until matrix_1.getColumns()) {
-                result.getElements().get(i)[j] =
-                    matrix_1.getElements().get(i).get(j) * matrix_2.getElements().get(i).get(j)
-            }
-        }
-        return result
+    fun hadamardDot(matrix_1: Matrix, matrix_2: Matrix): Matrix {
+        require(!(matrix_1.getRows() != matrix_2.getRows() || matrix_1.getColumns() != matrix_2.getColumns())) { "Matrices must have the same dimensions!" }
+        return Matrix(List(matrix_1.getRows()) { rowIndex ->
+            List(matrix_1.getColumns()) { columnIndex -> matrix_1.getElements()[rowIndex][columnIndex] * matrix_2.getElements()[rowIndex][columnIndex]}
+                .toMutableList()
+        }.toMutableList())
     }
 
     fun transpose(matrix: Matrix): Matrix {
-        val transposed_Matrix = Matrix(matrix.getColumns(), matrix.getRows())
-        for (i in 0 until matrix.getRows()) {
-            for (j in 0 until matrix.getColumns()) {
-                transposed_Matrix.getElements().get(j)[i] = matrix.getElements().get(i).get(j)
-            }
-        }
-        return transposed_Matrix
+        return Matrix(List(matrix.getColumns()) { rowIndex ->
+            List(matrix.getRows()) { columnIndex -> matrix.getElements()[columnIndex][rowIndex] }
+                .toMutableList()
+        }.toMutableList())
     }
 
-    fun subtract(matrix_1: Matrix, matrix_2: Matrix): Matrix {
-        require(!(matrix_1.getRows() != matrix_2.getRows() || matrix_1.getColumns() !== matrix_2.getColumns())) { "Matrices must have same dimensions!" }
-        val result = Matrix(matrix_1.getRows(), matrix_1.getColumns())
-        for (i in 0 until matrix_1.getRows()) {
-            for (j in 0 until matrix_1.getColumns()) {
-                result.getElements().get(i)[j] =
-                    matrix_1.getElements().get(i).get(j) - matrix_2.getElements().get(i).get(j)
-            }
-        }
-        return result
-    }
-
-    fun subtract(constant: Double, matrix: Matrix): Matrix {
-        val result = Matrix(matrix.getRows(), matrix.getColumns())
-        for (i in 0 until matrix.getRows()) {
-            for (j in 0 until matrix.getColumns()) {
-                result.getElements().get(i)[j] = 1 - matrix.getElements().get(i).get(j)
-            }
-        }
-        return result
-    }
-
-    fun add(matrix_1: Matrix, matrix_2: Matrix): Matrix {
-        require(!(matrix_1.getRows() != matrix_2.getRows() || matrix_1.getColumns() !== matrix_2.getColumns())) { "Matrices must have same dimensions!" }
-        val result = Matrix(matrix_1.getRows(), matrix_1.getColumns())
-        for (i in 0 until matrix_1.getRows()) {
-            for (j in 0 until matrix_1.getColumns()) {
-                result.getElements().get(i)[j] =
-                    matrix_1.getElements().get(i).get(j) + matrix_2.getElements().get(i).get(j)
-            }
-        }
-        return result
-    }
+    // fun subtract(matrix_1: Matrix, matrix_2: Matrix): Matrix {
+    //     require(!(matrix_1.getRows() != matrix_2.getRows() || matrix_1.getColumns() !== matrix_2.getColumns())) { "Matrices must have same dimensions!" }
+    //     val result = Matrix(matrix_1.getRows(), matrix_1.getColumns())
+    //     for (i in 0 until matrix_1.getRows()) {
+    //         for (j in 0 until matrix_1.getColumns()) {
+    //             result.getElements().get(i)[j] =
+    //                 matrix_1.getElements().get(i).get(j) - matrix_2.getElements().get(i).get(j)
+    //         }
+    //     }
+    //     return result
+    // }
+//
+    // fun subtract(constant: Double, matrix: Matrix): Matrix {
+    //     val result = Matrix(matrix.getRows(), matrix.getColumns())
+    //     for (i in 0 until matrix.getRows()) {
+    //         for (j in 0 until matrix.getColumns()) {
+    //             result.getElements().get(i)[j] = 1 - matrix.getElements().get(i).get(j)
+    //         }
+    //     }
+    //     return result
+    // }
+//
+    // fun add(matrix_1: Matrix, matrix_2: Matrix): Matrix {
+    //     require(!(matrix_1.getRows() != matrix_2.getRows() || matrix_1.getColumns() !== matrix_2.getColumns())) { "Matrices must have same dimensions!" }
+    //     val result = Matrix(matrix_1.getRows(), matrix_1.getColumns())
+    //     for (i in 0 until matrix_1.getRows()) {
+    //         for (j in 0 until matrix_1.getColumns()) {
+    //             result.getElements().get(i)[j] =
+    //                 matrix_1.getElements().get(i).get(j) + matrix_2.getElements().get(i).get(j)
+    //         }
+    //     }
+    //     return result
+    // }
 
     fun mult(matrix: Matrix, scalar: Double): Matrix {
-        val result = Matrix(matrix.getRows(), matrix.getColumns())
-        for (i in 0 until matrix.getRows()) {
-            for (j in 0 until matrix.getColumns()) {
-                result.getElements().get(i)[j] = matrix.getElements().get(i).get(j) * scalar
-            }
-        }
-        return result
+        return Matrix(matrix.getElements().map { rowWithElements ->
+            rowWithElements.map { columnElement -> columnElement * scalar }
+                .toMutableList()}
+            .toMutableList())
     }
 }
