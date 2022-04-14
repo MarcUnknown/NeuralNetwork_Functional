@@ -1,6 +1,7 @@
 fun main(args: Array<String>){
-    val neuralNetwork = NeuralNetwork(2,4,1)
-    val inputs = Matrix(2,2)
-    inputs.setElements(mutableListOf(mutableListOf(0.4), mutableListOf(0.6)))
+    val inputs = Matrix(mutableListOf(mutableListOf(0.4), mutableListOf(0.6)))
+    val hadamard_test = Matrix(mutableListOf(mutableListOf(2.0), mutableListOf(2.0)))
     println(inputs)
+    val matrixMath = MatrixMath()
+    println(matrixMath.hadamardDot(inputs, hadamard_test))
 }

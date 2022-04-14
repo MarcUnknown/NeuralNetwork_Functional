@@ -1,16 +1,24 @@
 class MatrixMath {
     fun dot(matrix_1: Matrix, matrix_2: Matrix): Matrix {
-        require(!(matrix_1.getColumns() !== matrix_2.getRows())) { "Rows does not match columns!" }
-        val result = Matrix(matrix_1.getRows(), matrix_2.getColumns())
+        require(matrix_1.getColumns() == matrix_2.getRows()) { "Rows does not match columns!" }
+        val elements = mutableListOf(mutableListOf<Double>())
         for (i in 0 until matrix_1.getRows()) {
             for (j in 0 until matrix_2.getColumns()) {
                 for (k in 0 until matrix_1.getColumns()) {
-                    result.getElements().get(i)[j] += matrix_1.getElements().get(i).get(k) * matrix_2.getElements()
-                        .get(k).get(j)
+                    elements[i][j] += matrix_1.getElements()[i][k] * matrix_2.getElements()[k][j]
                 }
             }
         }
-        return result
+
+        /*
+        return Matrix(List(matrix_1.getRows()) { rowMatrix1_Index ->
+            List(matrix_2.getColumns()) { columnMatrix2_Index ->
+                matrix_1.getElements().mapIndexed( {columnMatrix1_Index, elements -> matrix_1.getElements()[rowMatrix1_Index][columnMatrix1_Index] * matrix_2.getElements()[columnMatrix1_Index][columnMatrix2_Index] })
+            }.toMutableList()
+        }.toMutableList()
+        )
+        // matrix_1.getElements()[].map { columnMatrix1_Index -> matrix_1.getElements()[rowMatrix1_Index][columnMatrix1_Index] * matrix_2.getElements()[columnMatrix1_Index][columnMatrix2_Index] }
+        */
     }
 
     fun hadamardDot(matrix_1: Matrix, matrix_2: Matrix): Matrix {

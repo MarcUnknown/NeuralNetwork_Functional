@@ -1,5 +1,4 @@
-import java.util.*
-
+/*
 class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int) {
     private var weights_input_hidden: Matrix
     private var weights_hidden_output: Matrix
@@ -69,3 +68,4 @@ class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int) {
         matrixMath = MatrixMath()
     }
 }
+ */

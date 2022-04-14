@@ -1,17 +1,7 @@
-class Matrix(rows: Int, columns: Int) {
-    private val rows: Int
-    private val columns: Int
-    private var elements: MutableList<MutableList<Double>>
+class Matrix(private val elements: MutableList<MutableList<Double>>) {
 
     init {
-        require(!(rows < 1 || columns < 1)) { "Rows and columns have to be greater than 0!" }
-        this.rows = rows
-        this.columns = columns
-        elements = mutableListOf()
-    }
-
-    fun setElements(elements : MutableList<MutableList<Double>>) {
-        this.elements = elements
+        require(!(elements.size < 1 || elements[0].size < 1)) { "Rows and columns have to be greater than 0!" }
     }
 
     fun getElements() : MutableList<MutableList<Double>>{
@@ -23,7 +13,7 @@ class Matrix(rows: Int, columns: Int) {
     }
 
     fun getRows() : Int{
-        return rows
+        return elements.size
     }
 
     override fun toString(): String {
