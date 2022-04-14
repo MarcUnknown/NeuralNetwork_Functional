@@ -7,7 +7,7 @@ class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int) {
     private val matrixMath: MatrixMath
     private fun fillMatrixWithWeights(matrix: Matrix) {
         val random = Random()
-        Arrays.stream(matrix.getElements()).forEach { row -> Arrays.fill(row, random.nextGaussian()) }
+        //Arrays.stream(matrix.getElements()).forEach { row -> Arrays.fill(row, random.nextGaussian()) }
     }
 
     fun predict(inputs: Matrix?): Matrix {
@@ -47,8 +47,8 @@ class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int) {
     }
 
     private fun applySigmoid(matrix: Matrix): Matrix {
-        val result = Matrix(matrix.rows, matrix.getColumns())
-        Arrays.stream(matrix.getElements()).flatMapToDouble { row -> Arrays.stream(sigmoidForRow(row)) }.toArray()
+        val result = Matrix(matrix.getRows(), matrix.getColumns())
+        //Arrays.stream(matrix.getElements()).flatMapToDouble { row -> Arrays.stream(sigmoidForRow(row)) }.toArray()
         //result.setElements((Object[]) Arrays.stream(matrix.getElements()).peek(row -> Arrays.stream(row).toArray())
         return result
     }
