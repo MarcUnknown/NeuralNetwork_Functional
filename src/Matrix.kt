@@ -1,32 +1,29 @@
 class Matrix(rows: Int, columns: Int) {
-    val rows: Int
+    private val rows: Int
     private val columns: Int
-    private val elements: Array<DoubleArray>
+    private var elements: MutableList<MutableList<Double>>
 
-    fun setElements(rows: Array<Any>) {
-        for (i in rows.indices) {
-            elements[i] = rows[i] as DoubleArray
-        }
+    init {
+        require(!(rows < 1 || columns < 1)) { "Rows and columns have to be greater than 0!" }
+        this.rows = rows
+        this.columns = columns
+        elements = mutableListOf()
+    }
+
+    fun setElements(elements : MutableList<MutableList<Double>>) {
+        this.elements = elements
+    }
+
+    fun getElements() : MutableList<MutableList<Double>>{
+        return elements
     }
 
     fun getColumns() : Int{
         return columns
     }
 
-    fun getElements() : Array<DoubleArray>{
-        return elements
-    }
-
-    fun setRow(rowIndex: Int, row: DoubleArray) {
-        for (columnIndex in row.indices) elements[rowIndex][columnIndex] = row[columnIndex]
-    }
-
-    fun getRow(index: Int): DoubleArray {
-        return elements[index]
-    }
-
-    fun setWeight(row: Int, column: Int, weight: Double) {
-        elements[row][column] = weight
+    fun getRows() : Int{
+        return rows
     }
 
     override fun toString(): String {
@@ -38,12 +35,5 @@ class Matrix(rows: Int, columns: Int) {
             result.append("\n")
         }
         return result.toString()
-    }
-
-    init {
-        require(!(rows < 1 || columns < 1)) { "Rows and columns have to be greater than 0!" }
-        this.rows = rows
-        this.columns = columns
-        elements = Array(rows) { DoubleArray(columns) }
     }
 }
