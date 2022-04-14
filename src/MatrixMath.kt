@@ -5,7 +5,7 @@ class MatrixMath {
         for (i in 0 until matrix_1.rows) {
             for (j in 0 until matrix_2.getColumns()) {
                 for (k in 0 until matrix_1.getColumns()) {
-                    result.getElements().get(i).get(j) += matrix_1.getElements().get(i).get(k) * matrix_2.getElements()
+                    result.getElements().get(i)[j] += matrix_1.getElements().get(i).get(k) * matrix_2.getElements()
                         .get(k).get(j)
                 }
             }
@@ -18,7 +18,7 @@ class MatrixMath {
         val result = Matrix(matrix_1.rows, matrix_1.getColumns())
         for (i in 0 until matrix_1.rows) {
             for (j in 0 until matrix_1.getColumns()) {
-                result.getElements().get(i).get(j) =
+                result.getElements().get(i)[j] =
                     matrix_1.getElements().get(i).get(j) * matrix_2.getElements().get(i).get(j)
             }
         }
@@ -29,7 +29,7 @@ class MatrixMath {
         val transposed_Matrix = Matrix(matrix.getColumns(), matrix.rows)
         for (i in 0 until matrix.rows) {
             for (j in 0 until matrix.getColumns()) {
-                transposed_Matrix.getElements().get(j).get(i) = matrix.getElements().get(i).get(j)
+                transposed_Matrix.getElements().get(j)[i] = matrix.getElements().get(i).get(j)
             }
         }
         return transposed_Matrix
@@ -40,7 +40,7 @@ class MatrixMath {
         val result = Matrix(matrix_1.rows, matrix_1.getColumns())
         for (i in 0 until matrix_1.rows) {
             for (j in 0 until matrix_1.getColumns()) {
-                result.getElements().get(i).get(j) =
+                result.getElements().get(i)[j] =
                     matrix_1.getElements().get(i).get(j) - matrix_2.getElements().get(i).get(j)
             }
         }
@@ -51,7 +51,7 @@ class MatrixMath {
         val result = Matrix(matrix.rows, matrix.getColumns())
         for (i in 0 until matrix.rows) {
             for (j in 0 until matrix.getColumns()) {
-                result.getElements().get(i).get(j) = 1 - matrix.getElements().get(i).get(j)
+                result.getElements().get(i)[j] = 1 - matrix.getElements().get(i).get(j)
             }
         }
         return result
@@ -62,7 +62,7 @@ class MatrixMath {
         val result = Matrix(matrix_1.rows, matrix_1.getColumns())
         for (i in 0 until matrix_1.rows) {
             for (j in 0 until matrix_1.getColumns()) {
-                result.getElements().get(i).get(j) =
+                result.getElements().get(i)[j] =
                     matrix_1.getElements().get(i).get(j) + matrix_2.getElements().get(i).get(j)
             }
         }
@@ -73,7 +73,7 @@ class MatrixMath {
         val result = Matrix(matrix.rows, matrix.getColumns())
         for (i in 0 until matrix.rows) {
             for (j in 0 until matrix.getColumns()) {
-                result.getElements().get(i).get(j) = matrix.getElements().get(i).get(j) * scalar
+                result.getElements().get(i)[j] = matrix.getElements().get(i).get(j) * scalar
             }
         }
         return result

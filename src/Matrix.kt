@@ -9,6 +9,14 @@ class Matrix(rows: Int, columns: Int) {
         }
     }
 
+    fun getColumns() : Int{
+        return columns
+    }
+
+    fun getElements() : Array<DoubleArray>{
+        return elements
+    }
+
     fun setRow(rowIndex: Int, row: DoubleArray) {
         for (columnIndex in row.indices) elements[rowIndex][columnIndex] = row[columnIndex]
     }
