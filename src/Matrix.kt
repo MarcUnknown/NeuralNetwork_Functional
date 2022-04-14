@@ -27,13 +27,6 @@ class Matrix(rows: Int, columns: Int) {
     }
 
     override fun toString(): String {
-        val result = StringBuilder()
-        for (i in 0 until rows) {
-            for (j in 0 until columns) {
-                result.append(elements[i][j]).append("\t")
-            }
-            result.append("\n")
-        }
-        return result.toString()
+        return elements.joinToString(separator = "\n") { elementsInRow -> elementsInRow.joinToString(separator = "\t") }
     }
 }
