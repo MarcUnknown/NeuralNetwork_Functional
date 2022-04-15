@@ -1,6 +1,7 @@
 fun main(args: Array<String>){
-    val inputs = Matrix(mutableListOf(mutableListOf(0.4), mutableListOf(0.6)))
-    val hadamard_test = Matrix(mutableListOf(mutableListOf(2.0), mutableListOf(18.0)))
+
+    val inputs = Matrix(mutableListOf(mutableListOf(1.0, 2.0), mutableListOf(3.0, 4.0)))
+    val dot_test = Matrix(mutableListOf(mutableListOf(3.0), mutableListOf(4.0)))
     val matrixMath = MatrixMath()
-    println(matrixMath.subtract(1.0, hadamard_test))
+    println(matrixMath.dot(inputs, dot_test))
 }

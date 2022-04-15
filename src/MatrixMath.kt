@@ -1,7 +1,12 @@
+import java.util.stream.Collector
+import kotlin.streams.asSequence
+import kotlin.streams.toList
+
 class MatrixMath {
     fun dot(matrix_1: Matrix, matrix_2: Matrix): Matrix {
         require(matrix_1.getColumns() == matrix_2.getRows()) { "Rows does not match columns!" }
-        val elements = mutableListOf(mutableListOf<Double>())
+
+        val elements = MutableList(matrix_1.getRows()) { MutableList(matrix_2.getColumns()) {0.0} }
         for (i in 0 until matrix_1.getRows()) {
             for (j in 0 until matrix_2.getColumns()) {
                 for (k in 0 until matrix_1.getColumns()) {
@@ -10,15 +15,13 @@ class MatrixMath {
             }
         }
 
-        return Matrix(elements)
-
-        //return Matrix(List(matrix_1.getRows()) { matrix_1_rowIndex ->
-        //    List(matrix_2.getColumns()) { matrix_2_columnIndex ->
-        //        List(matrix_1.getColumns()) { matrix_1_columnIndex ->
-        //            matrix_1.getElements()[matrix_1_rowIndex][matrix_1_columnIndex] + matrix_2.getElements()[matrix_1_columnIndex][matrix_2_columnIndex]
-        //        }.toMutableList()
-        //    }.toMutableList()
-        //}.toMutableList())
+        // return Matrix(List(matrix_2.getRows()) { matrix_2_rowIndex ->
+        //     List(matrix_1.getColumns()) { matrix_1_columnIndex ->
+        //         List(matrix_2.getColumns()) { matrix_2_columnIndex ->
+        //             matrix_2.getElements()[matrix_2_rowIndex][matrix_2_columnIndex] + matrix_1.getElements()[matrix_2_columnIndex][matrix_1_columnIndex]
+        //         }.toMutableList()
+        //     }.toMutableList()
+        // }.toMutableList())
 
         /*
         return Matrix(List(matrix_1.getRows()) { rowMatrix1_Index ->
@@ -29,10 +32,12 @@ class MatrixMath {
         )
         // matrix_1.getElements()[].map { columnMatrix1_Index -> matrix_1.getElements()[rowMatrix1_Index][columnMatrix1_Index] * matrix_2.getElements()[columnMatrix1_Index][columnMatrix2_Index] }
         */
+        return Matrix(elements)
     }
 
     fun hadamardDot(matrix_1: Matrix, matrix_2: Matrix): Matrix {
         require(!(matrix_1.getRows() != matrix_2.getRows() || matrix_1.getColumns() != matrix_2.getColumns())) { "Matrices must have the same dimensions!" }
+
         return Matrix(List(matrix_1.getRows()) { rowIndex ->
             List(matrix_1.getColumns()) { columnIndex -> matrix_1.getElements()[rowIndex][columnIndex] * matrix_2.getElements()[rowIndex][columnIndex]}
                 .toMutableList()
@@ -49,6 +54,7 @@ class MatrixMath {
 
     fun subtract(matrix_1: Matrix, matrix_2: Matrix): Matrix {
         require(!(matrix_1.getRows() != matrix_2.getRows() || matrix_1.getColumns() != matrix_2.getColumns())) { "Matrices must have same dimensions!" }
+
         return Matrix(List(matrix_1.getRows()) { rowIndex ->
             List(matrix_1.getColumns()) { columnIndex ->
                 matrix_1.getElements()[rowIndex][columnIndex] - matrix_2.getElements()[rowIndex][columnIndex]
@@ -66,6 +72,7 @@ class MatrixMath {
 
     fun add(matrix_1: Matrix, matrix_2: Matrix): Matrix {
         require(!(matrix_1.getRows() != matrix_2.getRows() || matrix_1.getColumns() != matrix_2.getColumns())) { "Matrices must have same dimensions!" }
+
         return Matrix(List(matrix_1.getRows()) { rowIndex ->
             List(matrix_1.getColumns()) { columnIndex ->
                 matrix_1.getElements()[rowIndex][columnIndex] + matrix_2.getElements()[rowIndex][columnIndex]
