@@ -1,12 +1,35 @@
-/*
+import java.lang.IllegalArgumentException
+import java.util.Random
+import kotlin.math.exp
+
 class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int) {
-    private var weights_input_hidden: Matrix
-    private var weights_hidden_output: Matrix
-    var learning_rate = 0.1
+    private val weights_input_hidden: Matrix
+    private val weights_hidden_output: Matrix
+    private val learning_rate = 0.1
     private val matrixMath: MatrixMath
-    private fun fillMatrixWithWeights(matrix: Matrix) {
-        val random = Random()
-        //Arrays.stream(matrix.getElements()).forEach { row -> Arrays.fill(row, random.nextGaussian()) }
+    private val sigmoid : (Double) -> Double = { x: Double -> 1 / (1 + exp(-x)) }
+
+    init {
+        require(input_nodes > 0 && hidden_nodes > 0 && output_nodes > 0) { IllegalArgumentException("Nodes have to greater than 0!") }
+        weights_input_hidden = randomizeWeights(hidden_nodes, input_nodes)
+        weights_hidden_output = randomizeWeights(output_nodes, hidden_nodes)
+        matrixMath = MatrixMath()
+    }
+
+    private fun randomizeWeights(rows : Int, columns : Int) : Matrix{
+        return Matrix(List(rows) {
+            List(columns) {
+                Random().nextGaussian()
+            }.toMutableList()
+        }.toMutableList())
+    }
+
+    private fun applySigmoid(matrix: Matrix) : Matrix{
+        return Matrix(List(matrix.getRows()) { rowIndex ->
+            List(matrix.getColumns()) { columnIndex ->
+                sigmoid(matrix.getElements()[rowIndex][columnIndex])
+            }.toMutableList()
+        }.toMutableList())
     }
 
     fun predict(inputs: Matrix?): Matrix {
@@ -16,6 +39,7 @@ class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int) {
         return applySigmoid(output_in)
     }
 
+    /*
     fun train(inputs: Matrix?, targets: Matrix?) {
         val hidden_in = matrixMath.dot(weights_input_hidden, inputs!!)
         val hidden_out = applySigmoid(hidden_in)
@@ -44,28 +68,5 @@ class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int) {
         weights_input_hidden = matrixMath.add(weights_input_hidden, delta_weights_input_hidden)
         weights_hidden_output = matrixMath.add(weights_hidden_output, delta_weights_hidden_output)
     }
-
-    private fun applySigmoid(matrix: Matrix): Matrix {
-        val result = Matrix(matrix.getRows(), matrix.getColumns())
-        //Arrays.stream(matrix.getElements()).flatMapToDouble { row -> Arrays.stream(sigmoidForRow(row)) }.toArray()
-        //result.setElements((Object[]) Arrays.stream(matrix.getElements()).peek(row -> Arrays.stream(row).toArray())
-        return result
-    }
-
-    private fun sigmoidForRow(row: DoubleArray): DoubleArray {
-        return Arrays.stream(row).map { x: Double -> sigmoid(x) }.toArray()
-    }
-
-    private fun sigmoid(x: Double): Double {
-        return 1 / (1 + Math.exp(-x))
-    }
-
-    init {
-        weights_input_hidden = Matrix(hidden_nodes, input_nodes)
-        weights_hidden_output = Matrix(output_nodes, hidden_nodes)
-        fillMatrixWithWeights(weights_input_hidden)
-        fillMatrixWithWeights(weights_hidden_output)
-        matrixMath = MatrixMath()
-    }
+     */
 }
- */

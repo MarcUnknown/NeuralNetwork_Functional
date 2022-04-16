@@ -1,7 +1,3 @@
-import java.util.stream.Collector
-import kotlin.streams.asSequence
-import kotlin.streams.toList
-
 class MatrixMath {
     fun dot(matrix_1: Matrix, matrix_2: Matrix): Matrix {
         require(matrix_1.getColumns() == matrix_2.getRows()) { "Rows does not match columns!" }
@@ -9,8 +5,8 @@ class MatrixMath {
             List(matrix_2.getColumns()) { matrix_2_columnIndex ->
                 List(matrix_1.getColumns()) { matrix_1_columnIndex ->
                     matrix_1.getElements()[matrix_1_rowIndex][matrix_1_columnIndex] * matrix_2.getElements()[matrix_1_columnIndex][matrix_2_columnIndex]
-                }.toMutableList().fold(0.0) {acc, d ->
-                    acc + d}
+                }.fold(0.0) {sum, element ->
+                    sum + element}
             }.toMutableList()
         }.toMutableList())
     }
