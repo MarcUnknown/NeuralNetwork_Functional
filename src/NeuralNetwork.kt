@@ -1,19 +1,21 @@
-import java.lang.IllegalArgumentException
 import java.util.Random
-import kotlin.math.exp
 
-class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int) {
+class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int, activationFunction: ActivationFunctions) {
     private val weights_input_hidden: Matrix
     private val weights_hidden_output: Matrix
     private val learning_rate = 0.1
     private val matrixMath: MatrixMath
-    private val sigmoid : (Double) -> Double = { x: Double -> 1 / (1 + exp(-x)) }
+    private val activationMath : ActivationMath
+    private var activationFunction : (Double) -> Double = { 0.0 }
+
 
     init {
         require(input_nodes > 0 && hidden_nodes > 0 && output_nodes > 0) { IllegalArgumentException("Nodes have to greater than 0!") }
+        matrixMath = MatrixMath()
+        activationMath = ActivationMath()
         weights_input_hidden = randomizeWeights(hidden_nodes, input_nodes)
         weights_hidden_output = randomizeWeights(output_nodes, hidden_nodes)
-        matrixMath = MatrixMath()
+        this.activationFunction = (activationMath.getActivationFunction(activationFunction) as ((Double) -> Double)?)!!
     }
 
     private fun randomizeWeights(rows : Int, columns : Int) : Matrix{
@@ -24,19 +26,20 @@ class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int) {
         }.toMutableList())
     }
 
-    private fun applySigmoid(matrix: Matrix) : Matrix{
+    private fun applyActivationFunction(matrix: Matrix, f : (Double) -> Double) : Matrix{
         return Matrix(List(matrix.getRows()) { rowIndex ->
             List(matrix.getColumns()) { columnIndex ->
-                sigmoid(matrix.getElements()[rowIndex][columnIndex])
+                f(matrix.getElements()[rowIndex][columnIndex])
             }.toMutableList()
         }.toMutableList())
     }
 
     fun predict(inputs: Matrix?): Matrix {
-        val hidden_in = matrixMath.dot(weights_input_hidden, inputs!!)
-        val hidden_out = applySigmoid(hidden_in)
+        require(inputs != null) { IllegalArgumentException("Inputs must not be zero!") }
+        val hidden_in = matrixMath.dot(weights_input_hidden, inputs)
+        val hidden_out = applyActivationFunction(hidden_in, this.activationFunction)
         val output_in = matrixMath.dot(weights_hidden_output, hidden_out)
-        return applySigmoid(output_in)
+        return applyActivationFunction(output_in, this.activationFunction)
     }
 
     /*
