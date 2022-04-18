@@ -9,17 +9,17 @@ enum class ActivationFunctions{
 }
 
 class ActivationMath {
-    val sigmoid : (Double) -> Double = { 1 / (1 + exp(-it)) }
-    val reLu : (Double) -> Double = { max(0.0,it) }
-    val tanh : (Double) -> Double = { kotlin.math.tanh(it) }
-    val linear : (Double) -> Double = { it }
+    private val sigmoid : (Double) -> Double = { 1 / (1 + exp(-it)) }
+    private val reLu : (Double) -> Double = { max(0.0, it) }
+    private val tanh : (Double) -> Double = { kotlin.math.tanh(it) }
+    private val linear : (Double) -> Double = { it }
 
-    val dSigmoid : (Double) -> Double = { sigmoid(it) * (1 - sigmoid(it)) }
-    val dreLu : (Double) -> Double = { if (it < 0) 0.0 else 1.0 }
-    val dTanh : (Double) -> Double = { 1.0 - (tanh(it) * tanh(it)) }
-    val dLinear : (Double) -> Double = { 1.0 }
+    private val dSigmoid : (Double) -> Double = { sigmoid(it) * (1 - sigmoid(it)) }
+    private val dreLu : (Double) -> Double = { if (it < 0) 0.0 else 1.0 }
+    private val dTanh : (Double) -> Double = { 1.0 - (tanh(it) * tanh(it)) }
+    private val dLinear : (Double) -> Double = { 1.0 }
 
-    fun getActivationFunction(activationFunction: ActivationFunctions) : ((Double) -> Double?)? {
+    fun getActivationFunction(activationFunction: ActivationFunctions) : (Double) -> Double {
         require(true) { IllegalArgumentException("Activation function needs to be set!") }
         return when (activationFunction){
             ActivationFunctions.sigmoid -> sigmoid
