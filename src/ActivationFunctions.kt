@@ -28,4 +28,13 @@ class ActivationMath {
             ActivationFunctions.linear -> linear
         }
     }
+
+    fun applyDerivativeActivationFunction(matrix: Matrix, activationFunction : (Double) -> Double) : Matrix{
+        return Matrix(List(matrix.getRows()) { rowIndex->
+            List(matrix.getColumns()) { columnIndex ->
+                activationFunction(matrix.getElements()[rowIndex][columnIndex])
+            }.toMutableList()
+        }.toMutableList())
+    }
+
 }

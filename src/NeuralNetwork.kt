@@ -53,7 +53,7 @@ class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int, acti
             matrixMath.dot(
                 matrixMath.hadamardDot(
                     output_errors,
-                    matrixMath.hadamardDot(output_out, matrixMath.subtract(1.0, output_out))
+                    activationMath.applyDerivativeActivationFunction(output_out, activationFunction)
                 ),
                 matrixMath.transpose(hidden_out)
             ), learning_rate
@@ -62,7 +62,7 @@ class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int, acti
             matrixMath.dot(
                 matrixMath.hadamardDot(
                     hidden_errors,
-                    matrixMath.hadamardDot(hidden_out, matrixMath.subtract(1.0, hidden_out))
+                    activationMath.applyDerivativeActivationFunction(hidden_out, activationFunction)
                 ),
                 matrixMath.transpose(inputs)
             ), learning_rate
