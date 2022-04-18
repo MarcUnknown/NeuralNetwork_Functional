@@ -9,7 +9,7 @@ class NeuralNetwork(input_nodes: Int, hidden_nodes: Int, output_nodes: Int, acti
     private var activationFunction : (Double) -> Double = { 0.0 }
 
     init {
-        require(input_nodes > 0 && hidden_nodes > 0 && output_nodes > 0) { IllegalArgumentException("Nodes have to greater than 0!") }
+        require(input_nodes > 0 && hidden_nodes > 0 && output_nodes > 0) { IllegalArgumentException("Nodes have to be greater than 0!") }
         matrixMath = MatrixMath()
         activationMath = ActivationMath()
         weights_input_hidden = randomizeWeights(hidden_nodes, input_nodes)
