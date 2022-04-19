@@ -2,10 +2,10 @@ import kotlin.math.exp
 import kotlin.math.max
 
 enum class ActivationFunctions{
-    sigmoid,
-    reLu,
-    tanh,
-    linear
+    Sigmoid,
+    ReLu,
+    Tanh,
+    Linear
 }
 
 class ActivationMath {
@@ -22,10 +22,10 @@ class ActivationMath {
     fun getActivationFunction(activationFunction: ActivationFunctions) : (Double) -> Double {
         require(true) { IllegalArgumentException("Activation function needs to be set!") }
         return when (activationFunction){
-            ActivationFunctions.sigmoid -> sigmoid
-            ActivationFunctions.reLu -> reLu
-            ActivationFunctions.tanh -> tanh
-            ActivationFunctions.linear -> linear
+            ActivationFunctions.Sigmoid -> sigmoid
+            ActivationFunctions.ReLu -> reLu
+            ActivationFunctions.Tanh -> tanh
+            ActivationFunctions.Linear -> linear
         }
     }
 
