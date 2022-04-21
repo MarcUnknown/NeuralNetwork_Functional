@@ -1,12 +1,16 @@
-import java.util.Random
+import java.lang.StringBuilder
+import java.util.*
+import kotlin.math.sqrt
 
-class NeuralNetwork(input_nodes: Int, hidden_layers: MutableList<Int>, output_nodes: Int, activationFunction: ActivationFunctions) {
-    private var weights: MutableList<Matrix> = mutableListOf()
-    private val nodesLayers : MutableList<Int>
-    private var activationFunction : (Double) -> Double
-    private val learningRate = 0.1
-    private val activationMath : ActivationMath
+class NeuralNetwork(input_nodes: Int, hidden_layers: MutableList<Int>, output_nodes: Int, activationFunctions: MutableList<ActivationFunctions>) {
     private val matrixMath: MatrixMath
+    private val activationMath : ActivationMath
+
+    private val nodesLayers : MutableList<Int>
+    private var weights: MutableList<Matrix> = mutableListOf()
+    private val activationFunctions : MutableList<(Double) -> Double>
+
+    private val learningRate = 0.1
 
     init {
         require(input_nodes > 0 && output_nodes > 0) { IllegalArgumentException("Nodes have to be greater than 0!") }
@@ -14,7 +18,13 @@ class NeuralNetwork(input_nodes: Int, hidden_layers: MutableList<Int>, output_no
         activationMath = ActivationMath()
         nodesLayers = (mutableListOf(input_nodes) + hidden_layers + mutableListOf(output_nodes)).toMutableList()
         weights = initWeights()
-        this.activationFunction = activationMath.getActivationFunction(activationFunction)
+        this.activationFunctions = getActivationForLayers(activationFunctions)
+    }
+
+    private fun getActivationForLayers(activationFunctions : MutableList<ActivationFunctions>) : MutableList<(Double) -> Double>{
+        return List(weights.size) { index: Int ->
+            activationMath.getActivationFunction(activationFunctions[index])
+        }.toMutableList()
     }
 
     private fun initWeights() : MutableList<Matrix> {
@@ -41,14 +51,14 @@ class NeuralNetwork(input_nodes: Int, hidden_layers: MutableList<Int>, output_no
 
     fun predict(inputs: Matrix): Matrix {
         require(true) { IllegalArgumentException("Inputs must not be zero!") }
-        return weights.fold(inputs) { output, weightMatrix ->
-            applyActivationFunction(matrixMath.dot(weightMatrix, output), activationFunction)
+        return weights.foldIndexed(inputs) { index, output, weightMatrix ->
+            applyActivationFunction(matrixMath.dot(weightMatrix, output), activationFunctions[index])
         }
     }
 
     private fun predictWithOutputs(inputs: Matrix) : MutableList<Matrix> {
         return weights.foldIndexed(mutableListOf(inputs)) { index, output, weightMatrix ->
-            (output + applyActivationFunction(matrixMath.dot(weightMatrix, output[index]), activationFunction)).toMutableList()
+            (output + applyActivationFunction(matrixMath.dot(weightMatrix, output[index]), activationFunctions[index])).toMutableList()
         }
     }
 
@@ -65,7 +75,7 @@ class NeuralNetwork(input_nodes: Int, hidden_layers: MutableList<Int>, output_no
                 matrixMath.dot(
                     matrixMath.hadamardDot(
                         errors[index], activationMath.applyDerivativeActivationFunction(
-                            outputs[outputs.size-1-index], activationFunction
+                            outputs[outputs.size-1-index], activationFunctions[index]
                         )
                     ), matrixMath.transpose(outputs[outputs.size-2-index])
                 ), learningRate)
@@ -78,8 +88,16 @@ class NeuralNetwork(input_nodes: Int, hidden_layers: MutableList<Int>, output_no
         }.toMutableList()
     }
 
-    fun train(inputs: Matrix, targets: Matrix) {
+    private fun printLoss(predictions: Matrix, targets: Matrix, builder : StringBuilder){
+        val differences = matrixMath.subtract(predictions, targets)
+        val squared = matrixMath.hadamardDot(differences, differences)
+        val mean = squared.getElements().flatMap { row -> row.map { element -> element } }.sum()
+        builder.append("Loss value: " + sqrt(mean) + "\n")
+    }
+
+    fun train(inputs: Matrix, targets: Matrix, buffer : StringBuilder) {
         require(true) { IllegalArgumentException("Inputs and targets must be set!") }
         weights = addDeltasToWeightMatrices(calculateDeltaWeights(calculateErrors(predict(inputs), targets), predictWithOutputs(inputs)))
+        printLoss(predict(inputs), targets, buffer)
     }
 }

@@ -1,3 +1,5 @@
+import java.util.*
+
 class Matrix(private val elements: MutableList<MutableList<Double>>) {
 
     init {
@@ -14,6 +16,17 @@ class Matrix(private val elements: MutableList<MutableList<Double>>) {
 
     fun getRows() : Int{
         return elements.size
+    }
+
+    companion object {
+        fun of(elements : Array<Array<Double>>) : Matrix {
+            require(!(elements.isEmpty() || elements[0].isEmpty())) { "Rows and columns have to be greater than 0!" }
+            return Matrix(elements.map { row ->
+                row.map { element ->
+                    element
+                }.toMutableList()
+            }.toMutableList())
+        }
     }
 
     override fun toString(): String {
