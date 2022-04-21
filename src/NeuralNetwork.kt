@@ -53,7 +53,8 @@ class NeuralNetwork(input_nodes: Int, hidden_layers: MutableList<Int>, output_no
     }
 
     private fun calculateErrors(prediction : Matrix, targets: Matrix) : MutableList<Matrix>{
-        return weights.foldRightIndexed(mutableListOf(matrixMath.subtract(targets, prediction))) { index, weightMatrix, output ->
+        return weights.foldRightIndexed(mutableListOf(matrixMath.subtract(targets, prediction))) {
+                index, weightMatrix, output ->
             (output + matrixMath.dot(matrixMath.transpose(weightMatrix), output[weights.size - (index+1)])).toMutableList()
         }
     }
