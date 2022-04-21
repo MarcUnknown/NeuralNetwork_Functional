@@ -41,40 +41,44 @@ class NeuralNetwork(input_nodes: Int, hidden_layers: MutableList<Int>, output_no
 
     fun predict(inputs: Matrix): Matrix {
         require(true) { IllegalArgumentException("Inputs must not be zero!") }
-        return weights.fold(inputs) { output , weightMatrix ->
+        return weights.fold(inputs) { output, weightMatrix ->
             applyActivationFunction(matrixMath.dot(weightMatrix, output), activationFunction)
         }
     }
 
-    /*
+    private fun predictWithOutputs(inputs: Matrix) : MutableList<Matrix> {
+        return weights.foldIndexed(mutableListOf(inputs)) { index, output, weightMatrix ->
+            (output + applyActivationFunction(matrixMath.dot(weightMatrix, output[index]), activationFunction)).toMutableList()
+        }
+    }
+
+    private fun calculateErrors(prediction : Matrix, targets: Matrix) : MutableList<Matrix>{
+        return weights.foldRightIndexed(mutableListOf(matrixMath.subtract(targets, prediction))) { index, weightMatrix, output ->
+            (output + matrixMath.dot(matrixMath.transpose(weightMatrix), output[weights.size - (index+1)])).toMutableList()
+        }
+    }
+
+    private fun calculateDeltaWeights(errors : MutableList<Matrix>, outputs : MutableList<Matrix>) : MutableList<Matrix>{
+        return List(weights.size) { index ->
+            matrixMath.mult(
+                matrixMath.dot(
+                    matrixMath.hadamardDot(
+                        errors[index], activationMath.applyDerivativeActivationFunction(
+                            outputs[outputs.size-1-index], activationFunction
+                        )
+                    ), matrixMath.transpose(outputs[outputs.size-2-index])
+                ), learningRate)
+        }.toMutableList()
+    }
+
+    private fun addDeltasToWeightMatrices(deltaWeights : MutableList<Matrix>) : MutableList<Matrix>{
+        return List(deltaWeights.size) { index: Int ->
+            matrixMath.add(weights[index], deltaWeights[deltaWeights.size-1-index])
+        }.toMutableList()
+    }
+
     fun train(inputs: Matrix, targets: Matrix) {
         require(true) { IllegalArgumentException("Inputs and targets must be set!") }
-        val hidden_in = matrixMath.dot(weights_input_hidden, inputs)
-        val hidden_out = applyActivationFunction(hidden_in, activationFunction)
-        val output_in = matrixMath.dot(weights_hidden_output, hidden_out)
-        val output_out = applyActivationFunction(output_in, activationFunction)
-        val output_errors = matrixMath.subtract(targets, output_out)
-        val hidden_errors = matrixMath.dot(matrixMath.transpose(weights_hidden_output), output_errors)
-        val delta_weights_hidden_output = matrixMath.mult(
-            matrixMath.dot(
-                matrixMath.hadamardDot(
-                    output_errors,
-                    activationMath.applyDerivativeActivationFunction(output_out, activationFunction)
-                ),
-                matrixMath.transpose(hidden_out)
-            ), learningRate
-        )
-        val delta_weights_input_hidden = matrixMath.mult(
-            matrixMath.dot(
-                matrixMath.hadamardDot(
-                    hidden_errors,
-                    activationMath.applyDerivativeActivationFunction(hidden_out, activationFunction)
-                ),
-                matrixMath.transpose(inputs)
-            ), learningRate
-        )
-        weights_input_hidden = matrixMath.add(weights_input_hidden, delta_weights_input_hidden)
-        weights_hidden_output = matrixMath.add(weights_hidden_output, delta_weights_hidden_output)
+        weights = addDeltasToWeightMatrices(calculateDeltaWeights(calculateErrors(predict(inputs), targets), predictWithOutputs(inputs)))
     }
-     */
 }

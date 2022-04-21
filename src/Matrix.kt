@@ -19,8 +19,4 @@ class Matrix(private val elements: MutableList<MutableList<Double>>) {
     override fun toString(): String {
         return elements.joinToString(separator = "\n") { elementsInRow -> elementsInRow.joinToString(separator = "\t") }
     }
-
-    fun of(elements : MutableList<MutableList<Double>>) : Matrix {
-        return Matrix(elements)
-    }
 }

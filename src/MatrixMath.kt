@@ -13,10 +13,10 @@ class MatrixMath {
 
     fun hadamardDot(matrix_1: Matrix, matrix_2: Matrix): Matrix {
         require(!(matrix_1.getRows() != matrix_2.getRows() || matrix_1.getColumns() != matrix_2.getColumns())) { "Matrices must have the same dimensions!" }
-
         return Matrix(List(matrix_1.getRows()) { rowIndex ->
-            List(matrix_1.getColumns()) { columnIndex -> matrix_1.getElements()[rowIndex][columnIndex] * matrix_2.getElements()[rowIndex][columnIndex]}
-                .toMutableList()
+            List(matrix_1.getColumns()) { columnIndex ->
+                matrix_1.getElements()[rowIndex][columnIndex] * matrix_2.getElements()[rowIndex][columnIndex]
+            }.toMutableList()
         }.toMutableList())
     }
 
@@ -30,7 +30,6 @@ class MatrixMath {
 
     fun subtract(matrix_1: Matrix, matrix_2: Matrix): Matrix {
         require(!(matrix_1.getRows() != matrix_2.getRows() || matrix_1.getColumns() != matrix_2.getColumns())) { "Matrices must have same dimensions!" }
-
         return Matrix(List(matrix_1.getRows()) { rowIndex ->
             List(matrix_1.getColumns()) { columnIndex ->
                 matrix_1.getElements()[rowIndex][columnIndex] - matrix_2.getElements()[rowIndex][columnIndex]
@@ -58,8 +57,9 @@ class MatrixMath {
 
     fun mult(matrix: Matrix, scalar: Double): Matrix {
         return Matrix(matrix.getElements().map { rowWithElements ->
-            rowWithElements.map { columnElement -> columnElement * scalar }
-                .toMutableList()}
-            .toMutableList())
+            rowWithElements.map { columnElement ->
+                columnElement * scalar
+            }.toMutableList()
+        }.toMutableList())
     }
 }
