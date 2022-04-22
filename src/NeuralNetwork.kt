@@ -5,6 +5,7 @@ import kotlin.math.sqrt
 class NeuralNetwork(input_nodes: Int, hidden_layers: MutableList<Int>, output_nodes: Int, activationFunctions: MutableList<ActivationFunctions>) {
     private val matrixMath: MatrixMath
     private val activationMath : ActivationMath
+    private val lossFunctionMath : LossFunctionMath
 
     private val nodesLayers : MutableList<Int>
     private var weights: MutableList<Matrix> = mutableListOf()
@@ -16,6 +17,8 @@ class NeuralNetwork(input_nodes: Int, hidden_layers: MutableList<Int>, output_no
         require(input_nodes > 0 && output_nodes > 0) { IllegalArgumentException("Nodes have to be greater than 0!") }
         matrixMath = MatrixMath()
         activationMath = ActivationMath()
+        lossFunctionMath = LossFunctionMath()
+
         nodesLayers = (mutableListOf(input_nodes) + hidden_layers + mutableListOf(output_nodes)).toMutableList()
         weights = initWeights()
         this.activationFunctions = getActivationForLayers(activationFunctions)
@@ -91,7 +94,11 @@ class NeuralNetwork(input_nodes: Int, hidden_layers: MutableList<Int>, output_no
     private fun printLoss(predictions: Matrix, targets: Matrix, builder : StringBuilder){
         val differences = matrixMath.subtract(predictions, targets)
         val squared = matrixMath.hadamardDot(differences, differences)
-        val mean = squared.getElements().flatMap { row -> row.map { element -> element } }.sum()
+        val mean = squared.getElements().flatMap { row ->
+            row.map { element ->
+                element
+            }
+        }.sum()
         builder.append("Loss value: " + sqrt(mean) + "\n")
     }
 
