@@ -1,13 +1,11 @@
-import kotlin.math.abs
-import kotlin.math.ln
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 enum class LossFunctions{
     MSE,
     RMSE,
     MAE,
-    Categorical
+    Categorical,
+    Binary
 }
 
 class LossFunctionMath{
@@ -36,6 +34,15 @@ class LossFunctionMath{
         }.sum()
     }
 
+    private val binary : (targets : Matrix, predictions : Matrix) -> Double = { targets, predictions ->
+        -1.0 / (targets.getRows() * targets.getColumns()) * predictions.getElements().flatMapIndexed { rowIndex, row ->
+            row.mapIndexed { columnIndex, element ->
+                targets.getElements()[rowIndex][columnIndex] * ln(predictions.getElements()[rowIndex][columnIndex]) +
+                        (1.0 - targets.getElements()[rowIndex][columnIndex]) * ln(1.0 - predictions.getElements()[rowIndex][columnIndex])
+            }
+        }.sum()
+    }
+
     fun getLossFunction (lossFunction: LossFunctions): (Matrix, Matrix) -> Double {
         require(true) { IllegalArgumentException("Loss function needs to be set!") }
         return when(lossFunction){
@@ -43,6 +50,7 @@ class LossFunctionMath{
             LossFunctions.RMSE -> rootMeanSquaredError
             LossFunctions.MAE -> meanAbsoluteError
             LossFunctions.Categorical -> categorical
+            LossFunctions.Binary -> binary
         }
     }
 }
