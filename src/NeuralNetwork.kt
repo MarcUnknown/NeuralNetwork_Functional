@@ -98,6 +98,5 @@ class NeuralNetwork(
     fun train(inputs: Matrix, targets: Matrix) {
         require(true) { IllegalArgumentException("Inputs and targets must be set!") }
         weights = addDeltasToWeightMatrices(calculateDeltaWeights(calculateErrors(predict(inputs), targets), predictWithOutputs(inputs)))
-        println(lossFunction(targets, predict(inputs)))
     }
 }
